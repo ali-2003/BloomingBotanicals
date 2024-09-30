@@ -17,7 +17,7 @@ const dancingScript = Dancing_Script({
 export async function generateStaticParams() {
   const products = await client.fetch('*[_type == "product"]{slug}');
 
-  return products.map((product: any) => ({
+  return products.map((product) => ({
     slug: product.slug.current,
   }));
 }

@@ -5,7 +5,7 @@ interface Product {
   _id: string;
   name: string;
   price: number;
-  images: any[]; // Array of Sanity image objects
+  images: Array<any>; // Array of Sanity image objects
 }
 
 interface ProductCardProps {

@@ -1,8 +1,8 @@
 // app/index.tsx
 
-import Image from "next/image";
+
 import { client } from "@/sanity/lib/client";
-import Navbar from "./components/Navbar";
+
 
 import HomePageComponent from "./Home/page"; // Assuming this is the intended component
 
