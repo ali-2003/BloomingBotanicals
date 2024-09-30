@@ -8,7 +8,7 @@ const Navbar = () => {
         {/* Logo (acts as a home button) */}
         <Link href="/" className="flex items-center">
           <span
-            className="text-4xl font-semibold bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent"
+            className="text-4xl sm:text-2xl font-semibold bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent"
             style={{ fontFamily: "'Great Vibes', cursive" }}
           >
             Blooming Botanicals
