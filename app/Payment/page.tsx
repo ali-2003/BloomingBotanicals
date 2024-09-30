@@ -68,7 +68,7 @@ const PaymentForm: React.FC = () => {
     };
 
     emailjs.send('service_9hoacai', 'template_kxaxitx', templateParams, 'lDwAV3uAut8ihKZId')
-      .then((result) => {
+      .then(() => {
         clearCart();
         setShowDialog({ success: true, message: 'Payment submitted successfully! Redirecting...' });
         setTimeout(() => {
