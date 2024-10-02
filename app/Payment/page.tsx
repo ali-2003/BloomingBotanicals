@@ -71,16 +71,21 @@ const PaymentForm: React.FC = () => {
       totalAmount: totalAmount,
     };
 
-    emailjs.send('service_9hoacai', 'template_kxaxitx', templateParams, 'lDwAV3uAut8ihKZId')
+    emailjs.send('service_npm3w4s', 'template_kxaxitx', templateParams, 'lDwAV3uAut8ihKZId')
       .then(() => {
-        clearCart();
-        console.log(templateParams);
-        setShowDialog({ success: true, message: 'Payment submitted successfully! Redirecting...' });
+        // Send email to the customer after the admin email is sent successfully
+        return emailjs.send('service_npm3w4s', 'template_6pjk3uf', templateParams, 'lDwAV3uAut8ihKZId');
+      })
+      .then(() => {
+        clearCart(); // Clear the cart after both emails are sent
+
+        setShowDialog({ success: true, message: 'Payment submitted successfully! Order confirmation emails sent!' });
         setTimeout(() => {
           setShowDialog(null);
           router.push("/");
         }, 3000);
-      }, (error) => {
+      })
+      .catch((error) => {
         console.error('Error sending payment details:', error);
         setShowDialog({ success: false, message: 'Payment failed. Please try again!' });
       });
@@ -112,7 +117,7 @@ const PaymentForm: React.FC = () => {
           </div>
         </div>
 
-        <form ref={form} onSubmit={handleSubmit} className="space-y-6 mt-4">
+        <form ref={form} onSubmit={handleSubmit} className="space-y-6 mt-4 text-black">
           {/* Payment Method Selection */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Payment Method</label>
