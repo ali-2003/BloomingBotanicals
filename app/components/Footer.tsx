@@ -8,7 +8,7 @@ export default function Footer() {
         {/* Email and Established */}
         <div className="text-center md:text-left mb-4 md:mb-0">
           <p className="text-sm md:text-base">© 2024 Blooming Botanicals</p>
-          <p className="text-sm md:text-base">Email: <a href="mailto:contact@bloomingbotanicals.com" className="underline hover:text-teal-500">contact@bloomingbotanicals.com</a></p>
+          <p className="text-sm md:text-base">Email: <a href="mailto:bloomingbotanicals2@gmail.com" className="underline hover:text-teal-500">bloomingbotanicals2@gmail.com</a></p>
         </div>
 
         {/* Social Media Icons */}

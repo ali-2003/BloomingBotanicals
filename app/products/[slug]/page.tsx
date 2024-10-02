@@ -62,7 +62,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
           </div>
 
           {/* Product Description */}
-          <p className="text-lg lg:text-xl text-gray-600 leading-relaxed mb-4">
+          <p className="text-lg lg:text-xl text-gray-600 leading-relaxed mb-4 bg-white bg-opacity-45 rounded-lg p-4">
             <strong>{product.description}</strong>
           </p>
 
@@ -71,9 +71,8 @@ export default async function ProductPage({ params }: { params: { slug: string }
             <h2 className="text-xl font-bold text-gray-800">Key Features</h2>
             <ul className="list-disc list-inside text-md lg:text-l text-gray-600 space-y-2">
               <li>Made with 100% organic ingredients</li>
-              <li>Sulfate-free and gentle on all hair types</li>
+              <li>Gentle on all hair types</li>
               <li>Eco-friendly packaging</li>
-              <li>Safe for color-treated hair</li>
             </ul>
           </div>
 

@@ -40,15 +40,15 @@ const AddToCart = ({ productSlug, productName, productPrice, productImage }: Add
           {/* - Button */}
           <button
             onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
-            className="py-2 px-4 bg-white border border-gray-300 rounded shadow hover:shadow-md transition-all ease-in-out duration-200"
+            className="py-2 px-4 bg-white border border-gray-300 rounded shadow hover:shadow-md transition-all ease-in-out duration-200 text-black"
           >
             -
           </button>
-          <span>{quantity}</span>
+          <span className="text-black">{quantity}</span>
           {/* + Button */}
           <button
             onClick={() => setQuantity(quantity + 1)}
-            className="py-2 px-4 bg-white border border-gray-300 rounded shadow hover:shadow-md transition-all ease-in-out duration-200"
+            className="py-2 px-4 bg-white border border-gray-300 rounded shadow hover:shadow-md transition-all ease-in-out duration-200 text-black"
           >
             +
           </button>

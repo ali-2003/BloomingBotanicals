@@ -29,7 +29,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <link rel="icon" href="/images/logo.png" />
+      <head> <link rel="icon" href="/images/logo.png" /></head>
+      
       <body
         className="{`${geistSans.variable} ${geistMono.variable} antialiased`} min-h-screen flex flex-col"
         style={{

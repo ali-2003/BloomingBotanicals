@@ -15,7 +15,7 @@ const CartPage = () => {
 
   return (
     <section className="container mx-auto py-10 px-4">
-      <h1 className="text-4xl font-bold mb-8">Your Cart</h1>
+      <h1 className="text-4xl font-bold mb-8 text-black">Your Cart</h1>
 
       {cartItems.length === 0 ? (
         <div className="text-center">
@@ -32,21 +32,21 @@ const CartPage = () => {
               <div key={item.id} className="flex items-center bg-white rounded-lg shadow-lg p-6">
                 <Image src={item.image} alt={item.name} width={80} height={80} className="rounded-lg" />
                 <div className="ml-4 flex-1">
-                  <h2 className="text-xl font-semibold">{item.name}</h2>
+                  <h2 className="text-xl font-semibold text-black">{item.name}</h2>
                   <p className="text-gray-600">Rs. {item.price}</p>
                   <div className="flex items-center space-x-4 mt-2">
                     {/* Quantity Controls */}
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
+                      className="bg-gray-200  py-1 px-3 rounded hover:bg-gray-300 text-black"
                       disabled={item.quantity <= 1}
                     >
                       -
                     </button>
-                    <span>{item.quantity}</span>
+                    <span className="text-black">{item.quantity}</span>
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="bg-gray-200 text-gray-700 py-1 px-3 rounded hover:bg-gray-300"
+                      className="bg-gray-200  py-1 px-3 rounded hover:bg-gray-300 text-black"
                     >
                       +
                     </button>
@@ -64,7 +64,7 @@ const CartPage = () => {
           </div>
 
           {/* Cart Summary Section */}
-          <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
+          <div className="bg-gray-100 p-6 rounded-lg shadow-lg text-black">
             <h2 className="text-2xl font-bold mb-4">Summary</h2>
             <div className="space-y-4">
               <div className="flex justify-between">
@@ -73,11 +73,11 @@ const CartPage = () => {
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span>Free</span>
+                <span>Rs. 250</span>
               </div>
               <div className="flex justify-between font-semibold text-lg">
                 <span>Total</span>
-                <span>Rs. {total.toFixed(2)}</span>
+                <span>Rs. {(total+250).toFixed(2)}</span>
               </div>
               <button
                 onClick={() => router.push('/Payment')}

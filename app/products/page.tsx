@@ -16,7 +16,7 @@ export default async function Products() {
   
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-4xl font-bold text-center mb-10">Our Products</h1>
+      <h1 className="text-4xl font-bold text-center mb-10 text-black">Our Products</h1>
 
       {/* Check if products exist and display them */}
       {products && products.length > 0 ? (

@@ -21,17 +21,19 @@ const PaymentForm: React.FC = () => {
     transactionId: '',
   });
 
+  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod'); // Default to Cash on Delivery
   const [showDialog, setShowDialog] = useState<{ success: boolean; message: string } | null>(null);
   const form = useRef<HTMLFormElement>(null);
   const { cartItems, clearCart } = useCart();
   const router = useRouter();
 
+  const deliveryPrice = 250; // Set your delivery price here
+  const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0) + deliveryPrice;
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,7 +64,9 @@ const PaymentForm: React.FC = () => {
       email: formData.email,
       whatsapp: formData.whatsapp,
       address: formData.address,
-      transactionId: formData.transactionId,
+      transactionId: paymentMethod === 'online' ? formData.transactionId : 'N/A', // Only include if online payment
+      paymentMethod: paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment',
+      deliveryPrice: deliveryPrice, // Include delivery price
       cartItems: cartDetailsHTML,
       totalAmount: totalAmount,
     };
@@ -70,6 +74,7 @@ const PaymentForm: React.FC = () => {
     emailjs.send('service_9hoacai', 'template_kxaxitx', templateParams, 'lDwAV3uAut8ihKZId')
       .then(() => {
         clearCart();
+        console.log(templateParams);
         setShowDialog({ success: true, message: 'Payment submitted successfully! Redirecting...' });
         setTimeout(() => {
           setShowDialog(null);
@@ -82,28 +87,11 @@ const PaymentForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen  flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center p-6">
       <div className="bg-white p-8 rounded-lg shadow-2xl max-w-lg w-full relative">
         <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-8">Complete Your Payment</h2>
 
-        <div className="mb-6 text-sm text-gray-700 bg-indigo-50 p-4 rounded-lg shadow-inner">
-          <p className="mb-2">Please transfer the total amount to the bank account below. Write your transaction ID in the form.</p>
-          <p className="font-bold">You will receive a confirmation email once we verify the payment.</p>
-          <p>For any queries, contact us at <strong>bloomingbotanicals2@gmail.com</strong>.</p>
-        </div>
-
-        <div className="border-b pb-4 mb-4">
-          <h3 className="text-xl font-semibold mb-3 text-teal-600">Bank Details:</h3>
-          <ul className="text-gray-800 space-y-2">
-            <li><strong>Bank Name:</strong> Meezan Bank</li>
-            <li><strong>Recipient Name:</strong> GHUFRANA ZAKARIA/MUNEEBA BADAR
-</li>
-            <li><strong>Account Number:</strong> 01050110517736
-</li>
-            <li><strong>IBAN Number:</strong> PK60MEZN0001050110517736</li>
-          </ul>
-        </div>
-
+        {/* Order Summary - Always Displayed */}
         <div className="border-b pb-4 mb-4 bg-teal-50 p-4 rounded-lg">
           <h3 className="text-xl font-semibold mb-3 text-teal-700">Order Summary</h3>
           <ul className="text-gray-700 space-y-2">
@@ -113,14 +101,45 @@ const PaymentForm: React.FC = () => {
                 <span className="text-teal-700 font-bold">Rs. {item.price * item.quantity}</span>
               </li>
             ))}
+            <li className="flex justify-between py-1">
+              <span>Delivery:</span>
+              <span className="text-teal-700 font-bold">Rs. {deliveryPrice}</span>
+            </li>
           </ul>
-          <div className="border-t mt-3 pt-3 flex justify-between font-bold text-lg">
+          <div className="border-t mt-3 pt-3 flex justify-between font-bold text-lg text-black">
             <strong>Total Amount:</strong>
             <strong className="text-teal-800">Rs. {totalAmount}</strong>
           </div>
         </div>
 
-        <form ref={form} onSubmit={handleSubmit} className="space-y-6">
+        <form ref={form} onSubmit={handleSubmit} className="space-y-6 mt-4">
+          {/* Payment Method Selection */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">Payment Method</label>
+            <select
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value as 'cod' | 'online')}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="cod">Cash on Delivery</option>
+              <option value="online">Online Payment</option>
+            </select>
+          </div>
+
+          {/* Conditional Rendering of Bank Details */}
+          {paymentMethod === 'online' && (
+            <div className="border-b pb-4 mb-4">
+              <h3 className="text-xl font-semibold mb-3 text-teal-600">Bank Details:</h3>
+              <ul className="text-gray-800 space-y-2">
+                <li><strong>Bank Name:</strong> Meezan Bank</li>
+                <li><strong>Recipient Name:</strong> GHUFRANA ZAKARIA/MUNEEBA BADAR</li>
+                <li><strong>Account Number:</strong> 01050110517736</li>
+                <li><strong>IBAN Number:</strong> PK60MEZN0001050110517736</li>
+              </ul>
+            </div>
+          )}
+
+          {/* User Information Fields */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
             <input
@@ -173,22 +192,26 @@ const PaymentForm: React.FC = () => {
             />
           </div>
 
-          <div>
-            <label htmlFor="transactionId" className="block text-sm font-medium text-gray-700">Transaction ID</label>
-            <input
-              type="text"
-              name="transactionId"
-              placeholder="Transaction ID"
-              value={formData.transactionId}
-              onChange={handleInputChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </div>
+          {/* Show Transaction ID only for Online Payment */}
+          {paymentMethod === 'online' && (
+            <div>
+              <label htmlFor="transactionId" className="block text-sm font-medium text-gray-700">Transaction ID</label>
+              <input
+                type="text"
+                name="transactionId"
+                placeholder="Transaction ID"
+                value={formData.transactionId}
+                onChange={handleInputChange}
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+          )}
 
           <button type="submit" className="w-full bg-gradient-to-r from-teal-400 to-indigo-500 text-white py-2 px-4 rounded-md shadow-lg hover:from-teal-500 hover:to-indigo-600 transition duration-300 mt-6">
             Submit Payment
           </button>
+
         </form>
 
         {showDialog && (
