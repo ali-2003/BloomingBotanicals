@@ -62,8 +62,8 @@ export default async function ProductPage({ params }: { params: { slug: string }
           </div>
 
           {/* Product Description */}
-          <p className="text-lg lg:text-2xl text-gray-600 leading-relaxed mb-4">
-            {product.description}
+          <p className="text-lg lg:text-xl text-gray-600 leading-relaxed mb-4">
+            <strong>{product.description}</strong>
           </p>
 
           {/* Key Features */}
@@ -91,3 +91,5 @@ export default async function ProductPage({ params }: { params: { slug: string }
     </section>
   );
 }
+
+export const revalidate = 60; 

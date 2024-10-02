@@ -33,3 +33,5 @@ export default async function Products() {
     </div>
   );
 }
+
+export const revalidate = 60; 

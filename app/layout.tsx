@@ -29,23 +29,35 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      
+      <link rel="icon" href="/images/logo.png" />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="{`${geistSans.variable} ${geistMono.variable} antialiased`} min-h-screen flex flex-col"
+        style={{
+          backgroundImage: 'url("/images/bg.jpg")', // Path to your background image
+          backgroundSize: "cover",  // Adjust to "contain" if you prefer that
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed", // Keeps background fixed during scroll
+          backgroundPosition: "center",
+        }}
       >
         {/* Move Navbar inside the body tag */}
         <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet"/>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
-
+        
         <Navbar />
         <CartProvider>
         {children}
         </CartProvider>
         <Footer />
+        
       </body>
+      
     </html>
   );
 }
+
+
+
 
 // app/layout.tsx
 

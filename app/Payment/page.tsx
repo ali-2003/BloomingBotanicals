@@ -82,22 +82,25 @@ const PaymentForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 flex items-center justify-center p-6">
+    <div className="min-h-screen  flex items-center justify-center p-6">
       <div className="bg-white p-8 rounded-lg shadow-2xl max-w-lg w-full relative">
         <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-8">Complete Your Payment</h2>
 
         <div className="mb-6 text-sm text-gray-700 bg-indigo-50 p-4 rounded-lg shadow-inner">
           <p className="mb-2">Please transfer the total amount to the bank account below. Write your transaction ID in the form.</p>
           <p className="font-bold">You will receive a confirmation email once we verify the payment.</p>
-          <p>For any queries, contact us at <strong>support@yourwebsite.com</strong>.</p>
+          <p>For any queries, contact us at <strong>bloomingbotanicals2@gmail.com</strong>.</p>
         </div>
 
         <div className="border-b pb-4 mb-4">
           <h3 className="text-xl font-semibold mb-3 text-teal-600">Bank Details:</h3>
           <ul className="text-gray-800 space-y-2">
-            <li><strong>Bank Name:</strong> Your Bank Name</li>
-            <li><strong>Recipient Name:</strong> Your Name</li>
-            <li><strong>Account Number:</strong> 123456789</li>
+            <li><strong>Bank Name:</strong> Meezan Bank</li>
+            <li><strong>Recipient Name:</strong> GHUFRANA ZAKARIA/MUNEEBA BADAR
+</li>
+            <li><strong>Account Number:</strong> 01050110517736
+</li>
+            <li><strong>IBAN Number:</strong> PK60MEZN0001050110517736</li>
           </ul>
         </div>
 
