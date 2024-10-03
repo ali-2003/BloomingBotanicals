@@ -70,6 +70,7 @@ export default function Home() {
               src="/images/bottle.png"
               alt="Empty Bottle"
               layout="fill"
+              priority={true}
               objectFit="contain"
             />
           </div>
@@ -87,6 +88,7 @@ export default function Home() {
               src="/images/logo.png"
               alt="Blooming Botanicals Logo"
               layout="fill"
+              priority={true}
               objectFit="contain"
             />
           </div>
@@ -150,7 +152,7 @@ export default function Home() {
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
               <div className="relative w-full h-56 mb-6">
                 <Image
-                  src="/images/GentleHair.avif"
+                  src="/images/hair.jpeg"
                   alt="Gentle & Effective"
                   layout="fill"
                   objectFit="cover"
