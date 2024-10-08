@@ -130,7 +130,7 @@ export default function Home() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-700 mb-10 text-center" style={{ fontFamily: "'Poppins', sans-serif" }}>
             Our Specialties
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 text-center">
             {/* Organic Ingredients */}
             <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
               <div className="relative w-full h-56 mb-6">
@@ -166,7 +166,7 @@ export default function Home() {
             </div>
 
             {/* Sustainable & Eco-Friendly */}
-            <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+            {/* <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300">
               <div className="relative w-full h-56 mb-6">
                 <Image
                   src="/images/sustainable.webp"
@@ -180,7 +180,7 @@ export default function Home() {
               <p className="mt-4 text-gray-600 text-base leading-relaxed">
                 We care about the environment. Our packaging and ingredients are sustainably sourced.
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

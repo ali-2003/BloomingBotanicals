@@ -20,7 +20,7 @@ export default async function Products() {
 
       {/* Check if products exist and display them */}
       {products && products.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 justify-items-center max-w-screen-lg mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 justify-items-center max-w-screen-lg mx-auto sm: mt-2">
           {products.map((product: Product) => (
             <Link key={product._id} href={`/products/${product.slug.current}`} passHref>
               <ProductCard product={product} />

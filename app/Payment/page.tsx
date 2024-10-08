@@ -21,23 +21,43 @@ const PaymentForm: React.FC = () => {
     transactionId: '',
   });
 
-  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod'); // Default to Cash on Delivery
+  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod');
   const [showDialog, setShowDialog] = useState<{ success: boolean; message: string } | null>(null);
+  const [errorMessages, setErrorMessages] = useState<Partial<Record<keyof PaymentFormState, string>>>({});
   const form = useRef<HTMLFormElement>(null);
   const { cartItems, clearCart } = useCart();
   const router = useRouter();
 
-  const deliveryPrice = 250; // Set your delivery price here
+  const deliveryPrice = 250;
   const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0) + deliveryPrice;
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    // Clear error message for the field being edited
+    setErrorMessages((prev) => ({ ...prev, [name]: '' }));
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Validate required fields
+    const newErrorMessages: Partial<Record<keyof PaymentFormState, string>> = {};
+    if (!formData.name) newErrorMessages.name = 'Name is required';
+    if (!formData.email) newErrorMessages.email = 'Email is required';
+    if (!formData.whatsapp) newErrorMessages.whatsapp = 'WhatsApp Number is required';
+    if (!formData.address) newErrorMessages.address = 'Address is required';
+    if (paymentMethod === 'online' && !formData.transactionId) {
+      newErrorMessages.transactionId = 'Transaction ID is required for online payment';
+    }
 
+    // Check if there are any error messages
+    if (Object.keys(newErrorMessages).length > 0) {
+      setErrorMessages(newErrorMessages);
+      return;
+    }
+
+    // Send email logic (same as before)
     const cartDetailsHTML = `
       <table style="width: 100%; border-collapse: collapse; text-align: left;">
         <thead>
@@ -64,21 +84,19 @@ const PaymentForm: React.FC = () => {
       email: formData.email,
       whatsapp: formData.whatsapp,
       address: formData.address,
-      transactionId: paymentMethod === 'online' ? formData.transactionId : 'N/A', // Only include if online payment
+      transactionId: paymentMethod === 'online' ? formData.transactionId : 'N/A',
       paymentMethod: paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment',
-      deliveryPrice: deliveryPrice, // Include delivery price
+      deliveryPrice: deliveryPrice,
       cartItems: cartDetailsHTML,
       totalAmount: totalAmount,
     };
 
     emailjs.send('service_npm3w4s', 'template_kxaxitx', templateParams, 'lDwAV3uAut8ihKZId')
       .then(() => {
-        // Send email to the customer after the admin email is sent successfully
         return emailjs.send('service_npm3w4s', 'template_6pjk3uf', templateParams, 'lDwAV3uAut8ihKZId');
       })
       .then(() => {
-        clearCart(); // Clear the cart after both emails are sent
-
+        clearCart();
         setShowDialog({ success: true, message: 'Payment submitted successfully! Order confirmation emails sent!' });
         setTimeout(() => {
           setShowDialog(null);
@@ -96,7 +114,6 @@ const PaymentForm: React.FC = () => {
       <div className="bg-white p-8 rounded-lg shadow-2xl max-w-lg w-full relative">
         <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-8">Complete Your Payment</h2>
 
-        {/* Order Summary - Always Displayed */}
         <div className="border-b pb-4 mb-4 bg-teal-50 p-4 rounded-lg">
           <h3 className="text-xl font-semibold mb-3 text-teal-700">Order Summary</h3>
           <ul className="text-gray-700 space-y-2">
@@ -118,9 +135,10 @@ const PaymentForm: React.FC = () => {
         </div>
 
         <form ref={form} onSubmit={handleSubmit} className="space-y-6 mt-4 text-black">
-          {/* Payment Method Selection */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Payment Method</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Payment Method
+            </label>
             <select
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value as 'cod' | 'online')}
@@ -131,7 +149,6 @@ const PaymentForm: React.FC = () => {
             </select>
           </div>
 
-          {/* Conditional Rendering of Bank Details */}
           {paymentMethod === 'online' && (
             <div className="border-b pb-4 mb-4">
               <h3 className="text-xl font-semibold mb-3 text-teal-600">Bank Details:</h3>
@@ -144,79 +161,76 @@ const PaymentForm: React.FC = () => {
             </div>
           )}
 
-          {/* User Information Fields */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name <span className="text-red-500">*</span></label>
             <input
               type="text"
               name="name"
               placeholder="Full Name"
               value={formData.name}
               onChange={handleInputChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-4 py-2 border ${errorMessages.name ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500`}
             />
+            {errorMessages.name && <p className="text-red-500 text-sm">{errorMessages.name}</p>}
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email <span className="text-red-500">*</span></label>
             <input
               type="email"
               name="email"
               placeholder="Email"
               value={formData.email}
               onChange={handleInputChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-4 py-2 border ${errorMessages.email ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500`}
             />
+            {errorMessages.email && <p className="text-red-500 text-sm">{errorMessages.email}</p>}
           </div>
 
           <div>
-            <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-700">WhatsApp Number</label>
+            <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-700">WhatsApp Number <span className="text-red-500">*</span></label>
             <input
               type="tel"
               name="whatsapp"
               placeholder="WhatsApp Number"
               value={formData.whatsapp}
               onChange={handleInputChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-4 py-2 border ${errorMessages.whatsapp ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500`}
             />
+            {errorMessages.whatsapp && <p className="text-red-500 text-sm">{errorMessages.whatsapp}</p>}
           </div>
 
           <div>
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
+            <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address <span className="text-red-500">*</span></label>
             <textarea
               name="address"
               placeholder="Address"
               rows={4}
               value={formData.address}
               onChange={handleInputChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className={`mt-1 block w-full px-4 py-2 border ${errorMessages.address ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500`}
             />
+            {errorMessages.address && <p className="text-red-500 text-sm">{errorMessages.address}</p>}
           </div>
 
-          {/* Show Transaction ID only for Online Payment */}
           {paymentMethod === 'online' && (
             <div>
-              <label htmlFor="transactionId" className="block text-sm font-medium text-gray-700">Transaction ID</label>
+              <label htmlFor="transactionId" className="block text-sm font-medium text-gray-700">Transaction ID <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 name="transactionId"
                 placeholder="Transaction ID"
                 value={formData.transactionId}
                 onChange={handleInputChange}
-                required
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className={`mt-1 block w-full px-4 py-2 border ${errorMessages.transactionId ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500`}
               />
+              {errorMessages.transactionId && <p className="text-red-500 text-sm">{errorMessages.transactionId}</p>}
             </div>
           )}
 
           <button type="submit" className="w-full bg-gradient-to-r from-teal-400 to-indigo-500 text-white py-2 px-4 rounded-md shadow-lg hover:from-teal-500 hover:to-indigo-600 transition duration-300 mt-6">
             Submit Payment
           </button>
-
         </form>
 
         {showDialog && (
