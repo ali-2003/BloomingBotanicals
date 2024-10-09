@@ -29,7 +29,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       )}
 
       {/* Product Info */}
-      <h2 className="text-2xl font-semibold m-4 text-black">{product.name}</h2>
+      <h2 className="text-2xl font-semibold  text-black">{product.name}</h2>
       <div className="inline-block bg-gradient-to-r from-teal-400 to-cyan-500 text-white py-2 px-4 rounded-lg mb-6">
             <p className="text-3xl font-semibold">Rs. {product.price}</p>
           </div>
